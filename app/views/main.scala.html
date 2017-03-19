@@ -1,10 +1,10 @@
 @*
- * This template is called from the `index` template. This template
- * handles the rendering of the page header and body tags. It takes
- * two arguments, a `String` for the title of the page and an `Html`
- * object to insert into the body of the page.
- *@
-@(title: String)(content: Html)
+* This template is called from the `index` template. This template
+* handles the rendering of the page header and body tags. It takes
+* two arguments, a `String` for the title of the page and an `Html`
+* object to insert into the body of the page.
+*@
+@(title: String, user: models.users.User)(content: Html)
 
 <!DOCTYPE html>
 <html lang="en">
@@ -17,23 +17,29 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
     <body>
-            <nav>
-                <a href="/"><img src="@routes.Assets.versioned("images/logo1.gif")" width="147" height="150"></a>
-                    <ul class="col-8">
-                        <li><a href="/">Home</a></li>
-                        <li><a href="/menu">Menu</a></li>
-                        <li><a href="/reservations">Reservations</a></li>
-                        <li><a href="/aboutus">About Us</a></li>
-                    </ul>
-                    <ul class="col-2">
-                        <li><a href="/login">Login</a></li>
-                        <li><a href="/register">Register</a></li>
-                    </ul>
-            </nav>
+        <nav>
+            <a href="/"><img src="@routes.Assets.versioned("images/logo1.gif")" width="147" height="150"></a>
+            <ul class="col-8">
+                <li><a href="@routes.HomeController.index()">Home</a></li>
+                <li><a href="@routes.HomeController.menu()">Menu</a></li>
+                <li><a href="@routes.HomeController.reservations()">Reservations</a></li>
+                <li><a href="@routes.HomeController.aboutus()">About Us</a></li>
+            </ul>
+            <ul class="col-2">
+                <li @if(title == "Login"){class="active"}>
+                    @if(user != null){
+                        <a href="@routes.LoginController.logout()">Logout @user.getName()</a>
+                    } else {
+                        <a href="@routes.LoginController.login()">Login</a>
+                    }
+                </li>
+                <li><a href="@routes.HomeController.register()">Register</a></li>
+            </ul>
+        </nav>
         <main>
-        @* And here's where we render the `Html` object containing
-         * the page content. *@
-        @content
+            @* And here's where we render the `Html` object containing
+            * the page content. *@
+            @content
         </main>
     </body>
 </html>
